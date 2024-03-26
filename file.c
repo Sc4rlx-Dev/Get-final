@@ -18,6 +18,11 @@ static char	*ft_next(char **temp)
 	ptr = ft_substr (ptr, 0, ft_strlen (ptr));
 	free (*temp);
 	*temp = ptr;
+	if (*temp && *temp[0] == '\0')
+	{
+		free (*temp);
+		*temp = NULL;
+	}
 	return (line);
 }
 
@@ -44,6 +49,8 @@ static char	*ft_read(char *temp, int fd, char *buf)
 		}
 	}
 	free (buf);
+	// if (reader == 0)
+	// 	return (free (temp),NULL);
 	return (temp);
 }
 
@@ -67,11 +74,5 @@ char	*get_next_line(int fd)
 	temp = ft_read (temp, fd, buf);
 	if (!temp)
 		return (NULL);
-	if (!*temp)
-	{
-		free (temp);
-		temp = NULL;
-		return (NULL);
-	}
 	return (ft_next(&temp));
 }

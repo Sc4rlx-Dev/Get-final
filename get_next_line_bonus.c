@@ -49,29 +49,29 @@ static char	*ft_read(char *temp, int fd, char *buf)
 
 char	*get_next_line(int fd)
 {
-	static char	*temp;
+	static char	*temp[OPEN_MAX];
 	char		*buf;
 
 	if (fd == -1 || BUFFER_SIZE < 1)
 		return (NULL);
-	if (!temp)
-		temp = ft_strdup("");
-	if (!temp)
+	if (!temp[fd])
+		temp[fd] = ft_strdup("");
+	if (!temp[fd])
 		return (NULL);
 	buf = malloc (sizeof (*buf) * (BUFFER_SIZE + 1));
 	if (!buf)
 	{
-		free (temp);
+		free (temp[fd]);
 		return (NULL);
 	}
-	temp = ft_read (temp, fd, buf);
-	if (!temp)
+	temp[fd] = ft_read (temp[fd], fd, buf);
+	if (!temp[fd])
 		return (NULL);
-	if (!*temp)
+	if (!*temp[fd])
 	{
-		free (temp);
-		temp = NULL;
+		free (temp[fd]);
+		temp[fd] = NULL;
 		return (NULL);
 	}
-	return (ft_next(&temp));
+	return (ft_next(&temp[fd]));
 }
